@@ -7,14 +7,14 @@
 
 import * as cli from 'commander';
 import * as request from 'request';
+import * as logUpdate from 'log-update';
 
 cli
     .option('-a, --address <address>', 'Sever address (default: "localhost")')
     .option('-p, --port <number>', 'Port to connect (default: 2657)')
     .option('-r, --route <url>', 'Route to connect (default: "/monitor")')
     .option('-s, --ssl', 'Use SSL (https instead of http)')
-    .option('-v, --verbose', 'Verbose output')
-    .option('-g --get [param]',
+    .option('-g --get <param>',
     `Get params from server. Available params:
      registered_room - get all registered rooms names
      room - get all created rooms
@@ -22,6 +22,8 @@ cli
      room/state/0 - get created room state by id
      client - get all connected clients 
     `)
+    .option('-l, --loop [time]', 'Repeat the request after a specified time (defaut: 1000), and display the changes in real time')
+    .option('-v, --verbose', 'Verbose output')
     .version('0.1.0')
     .parse(process.argv);
 
@@ -32,6 +34,11 @@ let route = cli.route || "/monitor";
 let opearion = cli.get ? "/" + cli.get : "";
 let url = http + host + ":" + port + route + opearion;
 
+let loop = null;
+if (cli.loop === true) loop = 1000;
+else if (cli.loop) loop = cli.loop;
+
+
 
 let WAITING = true;
 
@@ -41,32 +48,47 @@ if (cli.verbose)
 //allow self-signed SSL sertificate
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-request.get(url, (err, res, body) => {
-    if (err)
-        console.log("Failed to connect to " + url + "\n" + err);
-    else if (res.statusCode == 404)
-        console.log("Requested item was not found");
-    else {
-        let info = JSON.parse(body);
-        if (opearion == "") {
-            console.log("Registered rooms: " + info.registeredRoomsCount);
-            console.log("Created rooms: " + info.createdRoomsCount)
-            console.log("Connected clients: " + info.connectedClientsCount)
-        }
-        // else if (opearion == "/registered_room") {
-        //     console.log("Registered rooms: " + info.registeredRoomsCount);
-        //     console.log("Created rooms: " + info.createdRoomsCount)
-        //     console.log("Connected clients: " + info.connectedClientsCount)
-        // }
+let requestsSended = 0;
+
+function sendRequest() {
+    request.get(url, (err, res, body) => {
+        requestsSended++;
+
+        let text = "";
+        if (err)
+            text = "Failed to connect to " + url + "\n" + err;
+        else if (res.statusCode == 404)
+            text = "Requested item was not found";
         else {
+            let info = JSON.parse(body);
 
-            console.log(info)
+            if (opearion == "") {
+                text += "Registered rooms: " + info.registeredRoomsCount + "\n";
+                text += "Created rooms: " + info.createdRoomsCount + "\n";
+                text += "Connected clients: " + info.connectedClientsCount + "\n";
+            }
+            // else if (opearion == "/registered_room") {
+            // }
+            else {
+                text = JSON.stringify(info, null, 4);
+            }
         }
-    }
-    WAITING = false;
-});
 
+        if (loop) {
+            let points = requestsSended % 20 + 1;
+            text += "\n" + ".".repeat(points);
+        }
 
+        logUpdate(text);
+
+        if (!loop)
+            WAITING = false;
+        else {
+            setTimeout(() => sendRequest(), loop);
+        }
+    });
+}
+sendRequest();
 
 
 function wait() { if (WAITING) setTimeout(wait, 100); };

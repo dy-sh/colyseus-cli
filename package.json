@@ -14,10 +14,12 @@
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
+    "log-update": "^2.1.0",
     "request": "^2.81.0"
   },
   "devDependencies": {
     "@types/commander": "^2.9.1",
+    "@types/log-update": "^2.0.0",
     "@types/request": "^2.0.0",
     "concurrently": "^3.5.0",
     "typescript": "^2.1.4"
