@@ -1,4 +1,4 @@
-#!/usr/bin / env node
+#!/usr/bin/env node
 
 /**
  * Created by Derwish (derwish.pro@gmail.com) on 30.07.2017.

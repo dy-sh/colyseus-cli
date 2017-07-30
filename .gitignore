@@ -32,9 +32,6 @@ node_modules
 # JetBrains
 .idea
 
-# Typescript
-*.js
-*.map
 
-# compiled js code
-dist
+
+

@@ -1,4 +1,4 @@
-This CLI-app allows to remote connect to colyseus server and control it using REST API. You need to intall colyseus-monitor on server side to use this app.
+This command-line app allows to remote monitoring colyseus server. You need to intall "colyseus-monitor" library on server side to use this app.
 
 
 

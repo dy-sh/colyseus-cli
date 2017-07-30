@@ -1,14 +1,28 @@
 {
   "name": "colyseus-cli",
-  "version": "0.1.0",
-  "description": "CLI for remote control colyseus server",
-  "main": "app.js",
+  "version": "0.4.0",
+  "description": "Command-line app for remote monitoring colyseus server",
+  "main": "./bin/colyseus-cli",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derwish-pro/colyseus-cli.git"
+  },
+  "keywords": [
+    "colyseus",
+    "cli",
+    "command-line",
+    "monitoring"
+  ],
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node ./bin/colyseus-cli",
     "build": "tsc",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"tsc -w\" \"nodemon dist/app.js\"",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"tsc -w\" \"nodemon bin/colyseus-cli\"",
     "postinstall": "npm run build",
     "check-updates": "ncu -u"
+  },
+  "bin": {
+    "colyseus-cli": "./bin/colyseus-cli",
+    "col": "./bin/colyseus-cli"
   },
   "author": "Derwish (derwish.pro@gmail.com)",
   "license": "MIT",
