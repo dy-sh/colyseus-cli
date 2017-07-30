@@ -22,7 +22,7 @@ cli
      room/state/0 - get created room state by id
      client - get all connected clients 
     `)
-    .option('-l, --loop [time]', 'Repeat the request after a specified time (defaut: 1000), and display the changes in real time')
+    .option('-l, --loop [time]', 'Repeat the request after a specified time (defaut: 1000), and display the changes in real time. This option is enabled by default for root monitoring (when --get flag is not defined), set "-l 0" if you want to disable it.')
     .option('-v, --verbose', 'Verbose output')
     .version('0.1.0')
     .parse(process.argv);
@@ -35,9 +35,10 @@ let opearion = cli.get ? "/" + cli.get : "";
 let url = http + host + ":" + port + route + opearion;
 
 let loop = null;
-if (cli.loop === true) loop = 1000;
-else if (cli.loop) loop = cli.loop;
-
+if (!cli.get && cli.loop == null) loop = 1000; //enable it for root monitoring ("/monitor")
+else if (cli.loop === true) loop = 1000; //"-l" without parameters
+else if (cli.loop == 0) loop = null; //disable it if "-l 0"
+else if (cli.loop) loop = cli.loop; // set number value
 
 
 let WAITING = true;
@@ -63,7 +64,7 @@ function sendRequest() {
             let info = JSON.parse(body);
 
             if (opearion == "") {
-                text += "Registered rooms: " + info.registeredRoomsCount + "\n";
+                // text += "Registered rooms: " + info.registeredRoomsCount + "\n";
                 text += "Created rooms: " + info.createdRoomsCount + "\n";
                 text += "Connected clients: " + info.connectedClientsCount + "\n";
             }
