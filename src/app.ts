@@ -5,7 +5,6 @@
  * License: MIT
  */
 
-
 import * as cli from 'commander';
 import * as request from 'request';
 
@@ -19,7 +18,7 @@ cli
     .parse(process.argv);
 
 let http = cli.ssl ? "https://" : "http://";
-let host = cli.host || "localhost";
+let host = cli.address || "localhost";
 let port = cli.port || 2657;
 let route = cli.route || "/monitor";
 let url = http + host + ":" + port + route;
@@ -27,24 +26,23 @@ let url = http + host + ":" + port + route;
 let waiting = true;
 
 if (cli.verbose)
-    console.log("Connecting to " + url)
+    console.log("Connecting to " + url + " ...")
 
-request
-    .get(url)
-    .on('error', err => {
+//allow self-signed SSL sertificate
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+request.get(url, (err, res, body) => {
+    if (err) {
         console.log("Failed to connect to " + url + "\n" + err);
-        waiting = false;
-    })
-    .on('response', response => {
-        console.log(response.statusCode) // 200 
-        console.log(response.headers['content-type']) // 'image/png' 
-        waiting = false;
-    })
-// (url, (err, res, body) => {
-// if (err) return "ERROR: " + err;
+    }
+    else if (res.statusCode == 404)
+        console.log("Requested item is not found");
+    else {
+        console.log(body)
+    }
+    waiting = false;
+});
 
-// console.log(res);
-// console.log(body);
 
 
 
