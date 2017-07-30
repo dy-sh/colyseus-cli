@@ -1,6 +1,6 @@
 {
   "name": "colyseus-cli",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Command-line app for remote monitoring colyseus server",
   "main": "./bin/colyseus-cli",
   "repository": {
@@ -16,8 +16,7 @@
   "scripts": {
     "start": "node ./bin/colyseus-cli",
     "build": "tsc",
-    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"tsc -w\" \"nodemon bin/colyseus-cli\"",
-    "postinstall": "npm run build",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"tsc -w\" \"nodemon bin/colyseus-cli.js\"",
     "check-updates": "ncu -u"
   },
   "bin": {
