@@ -1,6 +1,6 @@
 {
   "name": "colyseus-cli",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Command-line app for remote monitoring colyseus server",
   "main": "./bin/colyseus-cli",
   "repository": {
