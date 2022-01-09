@@ -5,7 +5,7 @@
   "main": "./bin/colyseus-cli",
   "repository": {
     "type": "git",
-    "url": "git://github.com/derwish-pro/colyseus-cli.git"
+    "url": "git://github.com/dy-sh/colyseus-cli.git"
   },
   "keywords": [
     "colyseus",
@@ -23,7 +23,7 @@
     "colyseus-cli": "./bin/colyseus-cli",
     "col": "./bin/colyseus-cli"
   },
-  "author": "Derwish (derwish.pro@gmail.com)",
+  "author": "Dmitry Savosh (d.savosh@gmail.com)",
   "license": "MIT",
   "dependencies": {
     "commander": "^2.11.0",
